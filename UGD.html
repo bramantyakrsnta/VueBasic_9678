@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGD</title>
+
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="judul" style="text-align: center; margin-top: 20%;">
+                <h2>Guess the Number</h2>
+                <p>
+                    in this page, you must guess a number between 1 to 10 <br> you have 3 life. Start Now!
+                </p>
+                <br>
+                <p>
+                    life : {{ life }}
+                </p>
+                <p>
+                    random number : {{ randNumber }}
+                </p>
+            </div>
+
+            <div class="content">
+                <div class="inputan" style="width: 20%; margin-left: 40%;">
+                    <input v-model="tebak" class="form-control" style="text-align: center;" type="number" placeholder="input angka 1 - 10">
+                </div>
+                <br>
+                <div class="button" v-if="temp == '' || temp == 'greater' || temp == 'less'" style="text-align: center;">
+                    <button @click="begin" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="button" v-if="temp == 'win'" style="text-align: center;">
+                    <button @click="ulang" class="btn btn-success">Play Again</button>
+                </div>
+                <div class="button" v-if="temp == 'lost'" style="text-align: center;">
+                    <button @click="ulang" class="btn btn-danger">Try Again</button>
+                </div>
+            </div>
+
+            <div class="afterContent">
+                <div class="attention" v-if="temp == 'win'" style="margin-top: 5%; text-align: center;">
+                    <h4>You Win!</h4>
+                    <br>
+                    <h4>
+                        The number to guess is {{ randNumber }}
+                    </h4>
+                </div>
+                <div class="attention" v-if="temp == 'lost'" style="margin-top: 5%; text-align: center;">
+                    <h4>You Lose, Try Again</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer" style="bottom: 0; width: 100%; text-align: center; height: 100px; position: absolute;">
+            <p>
+                {{ bram.nama }} | {{ bram.npm }} | {{ bram.kelas }}
+                <br><br> if it aint simple, it aint me
+            </p>
+        </div>
+    </div>
+</body>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            randNumber: 0,
+            life: 3,
+            temp: '',
+            tebak: '',
+            bram: {
+                nama: 'Bramantya Krisnanta',
+                npm: '9678',
+                kelas: 'PAW-D',
+            },
+        },
+        methods: {
+            rand: function() {
+                do {
+                    this.randNumber = Math.ceil(Math.random() * 10);
+                } while (this.randNumber >= 10 || this.randNumber <= 1);
+            },
+
+            begin: function(input) {
+                if (this.randNumber == 0)
+                    this.rand();
+
+                let num = parseInt(this.tebak); //mindahin inputan ke num
+                this.tebak = '';
+                num = Math.ceil(num);
+
+                if (num >= 1 && num <= 10) {
+                    this.life--;
+                    if (num == this.randNumber) {
+                        this.temp = "win";
+                    } else {
+                        if (this.life == 0) {
+                            this.temp = "lost";
+                        }
+                    };
+                    form.reset();
+                } else {
+                    alert('Wrong Input');
+                    form.reset();
+                }
+            },
+
+            ulang: function() {
+                this.temp = "";
+                this.rand();
+                this.life = 3;
+            }
+        }
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</html>
