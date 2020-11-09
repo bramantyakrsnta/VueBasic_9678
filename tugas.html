@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas</title>
+
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <main id="app">
+        <div class="container" style="margin-top: 2%; border-style: solid; background-color: #f4f4f4;">
+            <!-- HEADER -->
+            <div class="head" style="margin-top: 3%; text-align: center;">
+                <h2>{{ title }}</h2>
+                <p style="margin-top: 20px;">
+                    Welcome to TODO List Website <br> Insert something for your newest TODO List down below
+                </p>
+                <hr style="width: 50%; background-color: black;">
+            </div>
+
+            <!-- FORM -->
+            <div class="form">
+                <div class="form-group" style="margin-top: 3%;">
+                    <div class="judul" style="width: 70%; margin-left: 15%; text-align: center;">
+                        <label for="title" class="font-weight-bold">Title : </label>
+                        <input v-model="todo.title" id="title" class="form-control" type="text" style="text-align: center;" placeholder="Title">
+                    </div>
+                    <br>
+                    <div class="catatan" style="width: 70%; margin-left: 15%; text-align: center;">
+                        <label for="desc" class="font-weight-bold">Description : </label>
+                        <textarea class="form-control" v-model="todo.desc" rows="3" id="desc" placeholder="Put Your Description here" style="text-align: center;"></textarea>
+                    </div>
+                    <br>
+                    <div class="dropdown" style="width: 30%; margin-left: 35%; text-align: center;">
+                        <label for="kategori" class="font-weight-bold">Kategori :</label>
+                        <select class="form-control" id="kategori" v-model="todo.kategori">
+                            <option value="" disabled>-- Select One</option>
+                            <option v-for="kt in kategori" v-bind:value="kt.value">{{kt.text}}</option>
+                        </select>
+                    </div>
+                    <div class="button" style="text-align: center;">
+                        <button id="ulang" @click="reload" class="btn btn-danger" style="margin-top: 3%;">Reset</button>
+                        <button id="add" @click="add" class="btn btn-primary" style="margin-top: 3%;">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <!-- BODY -->
+            <div class="card mx-auto" v-for='td in todo' style="margin-top: 3%; height: auto; width: 50%; border-style: solid; background-color: bisque;">
+                <div class="card-header">
+                    <h4>{{ td.title }}</h4>
+                </div>
+                <div class="card-body" style="margin-left: 5%;">
+                    <div v-if="td.kategori == 'Penting'">
+                        <p>{{ td.desc }}</p>
+                        <p class="font-weight-bold text-danger">{{ td.kategori }}</p>
+                    </div>
+                    <div v-if="td.kategori == 'Biasa'">
+                        <p>{{ td.desc }}</p>
+                        <p class="font-weight-bold text-warning">{{ td.kategori }}</p>
+                    </div>
+                    <div v-if="td.kategori == 'Tidak Penting'">
+                        <p>{{ td.desc }}</p>
+                        <p class="font-weight-bold text-success">{{ td.kategori }}</p>
+                    </div>
+                    <div class="button-body d-flex flex-row-reverse">
+                        <!-- <button class="btn btn-success" style="width: auto;" @click="checked(td)">Success</button> -->
+                        <button v-model="button" @click="deleted(td)" id="delete" class="btn btn-danger" style="width: auto;">Hapus</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        <br>
+        <br>
+        <footer class="text-center">
+            <p class="font-weight-bold" style="margin-bottom: 3%;"> {{ data.name }} | {{ data.npm }} | {{ data.kelas }} </p>
+        </footer>
+    </main>
+</body>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            title: 'TODO List',
+            data: {
+                name: 'Bramantya Krisnanta',
+                npm: '180709678',
+                kelas: 'PAW-D',
+            },
+
+            kategori: [{
+                text: 'Penting',
+                value: 'Penting'
+            }, {
+                text: 'Biasa',
+                value: 'Biasa'
+            }, {
+                text: 'Tidak Penting',
+                value: 'Tidak Penting'
+            }],
+
+            todo: [{
+                title: 'Kerjain Tugas',
+                kategori: 'Penting',
+                desc: 'Yang selalu menghantui'
+            }, {
+                title: 'Tidur',
+                kategori: 'Tidak Penting',
+                desc: 'Asik'
+            }, {
+                title: 'Drakor',
+                kategori: 'Biasa',
+                desc: 'Start Up, Record of Youth'
+            }],
+
+            selected: '',
+        },
+
+        methods: {
+            add: function(a) {
+                a.preventDefault();
+                this.todo.push({
+                    title: this.todo.title,
+                    kategori: this.todo.kategori,
+                    desc: this.todo.desc,
+                });
+                this.reload();
+            },
+
+            deleted: function(td) {
+                this.todo.splice(this.todo.indexOf(td), 1)
+            },
+
+            reload() {
+                this.todo.title = "",
+                    this.todo.kategori = "",
+                    this.todo.desc = ""
+            },
+        }
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</html>
